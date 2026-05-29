@@ -1,0 +1,13 @@
+# PyInstaller build artifacts
+mac/build/
+mac/dist/
+win/build/
+win/dist/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
