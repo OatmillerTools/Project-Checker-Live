@@ -179,11 +179,13 @@ def _build_report(data: dict) -> str:
     with_content = [t for t in data["tracks"] if t["has_content"]]
     vst_total: set[str] = set()
     auto_count = sum(1 for t in data["tracks"] if t["has_automation"])
-    for t in data["tracks"]:
-        vst_total.update(t["vst2_plugins"])
-        vst_total.update(t["vst3_plugins"])
-    vst_total.update(main["vst2_plugins"])
-    vst_total.update(main["vst3_plugins"])
+    for src in data["tracks"] + [main]:
+        for n in src.get("vst2_plugins", []):
+            vst_total.add(f"VST2:{n}")
+        for n in src.get("vst3_plugins", []):
+            vst_total.add(f"VST3:{n}")
+        for name in _rack_devices(src.get("rack_details", []), "vst"):
+            vst_total.add(name)
 
     lines.append("=== СВОДКА ===")
     lines.append(f"  Треков: {len(data['tracks'])}  |  с контентом: {len(with_content)}")
@@ -620,9 +622,13 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         # Summary bar
         with_content = [t for t in data["tracks"] if t["has_content"]]
         vst_all: set[str] = set()
-        for t in data["tracks"]:
-            vst_all.update(t["vst2_plugins"]); vst_all.update(t["vst3_plugins"])
-        vst_all.update(main["vst2_plugins"]); vst_all.update(main["vst3_plugins"])
+        for src in data["tracks"] + [main]:
+            for n in src.get("vst2_plugins", []):
+                vst_all.add(f"VST2:{n}")
+            for n in src.get("vst3_plugins", []):
+                vst_all.add(f"VST3:{n}")
+            for name in _rack_devices(src.get("rack_details", []), "vst"):
+                vst_all.add(name)
         auto_count = sum(1 for t in data["tracks"] if t["has_automation"])
 
         summary_card = ctk.CTkFrame(self._info_area, fg_color="#263226", corner_radius=8)
