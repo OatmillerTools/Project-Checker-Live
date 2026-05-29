@@ -52,6 +52,155 @@ _TYPE_COLORS = {
     "group": "#FFD54F", "return": "#CE93D8", "main": "#FF8A65",
 }
 
+# ── i18n ───────────────────────────────────────────────────────────────────────
+
+_LANG = "ru"
+
+_STRINGS: dict[str, dict[str, str]] = {
+    "ru": {
+        "btn_open":            "Открыть .als файл",
+        "btn_copy":            "Копировать отчёт",
+        "btn_scan":            "Сканировать плагины",
+        "btn_refresh":         "Обновить",
+        "btn_scanning":        "Сканирование...",
+        "no_file":             "Файл не выбран",
+        "placeholder":         "Перетащите .als файл сюда\nили нажмите «Открыть .als файл»",
+        "dialog_title":        "Выберите файл Ableton Live",
+        "dialog_all_files":    "Все файлы",
+        "warn_invalid_title":  "Неверный файл",
+        "warn_invalid_msg":    "Пожалуйста, перетащите файл .als",
+        "err_title":           "Ошибка",
+        "done_title":          "Готово",
+        "done_msg":            "Отчёт скопирован в буфер обмена.",
+        "tab_tracks":          "Треки",
+        "tab_instruments":     "Инструменты",
+        "tab_audio_fx":        "Аудио FX",
+        "tab_midi_fx":         "MIDI FX",
+        "tab_vst":             "VST",
+        "main_channel":        "MAIN КАНАЛ",
+        "fader":               "Фейдер:",
+        "fader_above":         "⚠ выше 0 dB!",
+        "plugins_on_main":     "Плагины на Main:",
+        "m4l_on_main":         "M4L на Main:",
+        "none":                "Нет",
+        "total_tracks":        "Треков всего:",
+        "with_content":        "С контентом:",
+        "length":              "Длина:",
+        "third_party":         "Сторонних плагинов:",
+        "automation_on":       "Автоматизация на:",
+        "automation_tr_sfx":   "тр.",
+        "samples_none":        "✓  Семплы не используются",
+        "no_content":          "— Нет контента (клипы пустые)",
+        "live_instruments":    "Инструменты Live:",
+        "m4l_instruments":     "Инструменты M4L:",
+        "live_effects":        "Эффекты Live:",
+        "m4l_effects":         "Эффекты M4L:",
+        "midi_fx_m4l":         "MIDI-эффекты M4L:",
+        "automation":          "Автоматизация:",
+        "yes":                 "Есть",
+        "no":                  "Нет",
+        "send_off":            "  [откл.]",
+        "empty_list":          "Нет",
+        "rep_arr_len":         "Длина аранжировки:",
+        "rep_main":            "=== MAIN КАНАЛ ===",
+        "rep_fader":           "  Фейдер:",
+        "rep_warn_fader":      "  ⚠ ВНИМАНИЕ: фейдер выше 0 dB!",
+        "rep_live_fx":         "  Эффекты Live:",
+        "rep_tracks":          "=== ТРЕКИ ===",
+        "rep_no_content":      "  — Нет контента (клипы пустые)",
+        "rep_instruments":     "  Инструменты:",
+        "rep_m4l_instruments": "  Инструменты M4L:",
+        "rep_effects":         "  Эффекты:",
+        "rep_m4l_effects":     "  Эффекты M4L:",
+        "rep_midi_m4l":        "  MIDI M4L:",
+        "rep_automation":      "  Автоматизация:",
+        "rep_yes":             "Да",
+        "rep_no":              "Нет",
+        "rep_send_off":        " [откл.]",
+        "rep_summary":         "=== СВОДКА ===",
+        "rep_tracks_count":    "  Треков:",
+        "rep_with_content":    "  с контентом:",
+        "rep_third_party":     "  Сторонних плагинов (уникальных):",
+        "rep_auto_count":      "  Треков с автоматизацией:",
+        "rep_samples_found":   "  Семплы: найдено",
+        "rep_samples_missing": ", не найдено",
+        "rep_missing":         "  Отсутствуют:",
+    },
+    "en": {
+        "btn_open":            "Open .als file",
+        "btn_copy":            "Copy report",
+        "btn_scan":            "Scan plugins",
+        "btn_refresh":         "Refresh",
+        "btn_scanning":        "Scanning...",
+        "no_file":             "No file selected",
+        "placeholder":         "Drag .als file here\nor click \"Open .als file\"",
+        "dialog_title":        "Select Ableton Live file",
+        "dialog_all_files":    "All files",
+        "warn_invalid_title":  "Invalid file",
+        "warn_invalid_msg":    "Please drop an .als file",
+        "err_title":           "Error",
+        "done_title":          "Done",
+        "done_msg":            "Report copied to clipboard.",
+        "tab_tracks":          "Tracks",
+        "tab_instruments":     "Instruments",
+        "tab_audio_fx":        "Audio FX",
+        "tab_midi_fx":         "MIDI FX",
+        "tab_vst":             "VST",
+        "main_channel":        "MAIN CHANNEL",
+        "fader":               "Fader:",
+        "fader_above":         "⚠ above 0 dB!",
+        "plugins_on_main":     "Plugins on Main:",
+        "m4l_on_main":         "M4L on Main:",
+        "none":                "None",
+        "total_tracks":        "Total tracks:",
+        "with_content":        "With content:",
+        "length":              "Length:",
+        "third_party":         "3rd-party plugins:",
+        "automation_on":       "Automation on:",
+        "automation_tr_sfx":   "tr.",
+        "samples_none":        "✓  No samples used",
+        "no_content":          "— No content (clips empty)",
+        "live_instruments":    "Live Instruments:",
+        "m4l_instruments":     "M4L Instruments:",
+        "live_effects":        "Live Effects:",
+        "m4l_effects":         "M4L Effects:",
+        "midi_fx_m4l":         "MIDI FX M4L:",
+        "automation":          "Automation:",
+        "yes":                 "Yes",
+        "no":                  "No",
+        "send_off":            "  [off]",
+        "empty_list":          "None",
+        "rep_arr_len":         "Arrangement length:",
+        "rep_main":            "=== MAIN CHANNEL ===",
+        "rep_fader":           "  Fader:",
+        "rep_warn_fader":      "  ⚠ WARNING: fader above 0 dB!",
+        "rep_live_fx":         "  Live Effects:",
+        "rep_tracks":          "=== TRACKS ===",
+        "rep_no_content":      "  — No content (clips empty)",
+        "rep_instruments":     "  Instruments:",
+        "rep_m4l_instruments": "  M4L Instruments:",
+        "rep_effects":         "  Effects:",
+        "rep_m4l_effects":     "  M4L Effects:",
+        "rep_midi_m4l":        "  MIDI M4L:",
+        "rep_automation":      "  Automation:",
+        "rep_yes":             "Yes",
+        "rep_no":              "No",
+        "rep_send_off":        " [off]",
+        "rep_summary":         "=== SUMMARY ===",
+        "rep_tracks_count":    "  Tracks:",
+        "rep_with_content":    "  with content:",
+        "rep_third_party":     "  3rd-party plugins (unique):",
+        "rep_auto_count":      "  Tracks with automation:",
+        "rep_samples_found":   "  Samples: found",
+        "rep_samples_missing": ", missing",
+        "rep_missing":         "  Missing:",
+    },
+}
+
+
+def T(key: str) -> str:
+    return _STRINGS[_LANG].get(key, key)
+
 
 def _is_rack_entry(name: str) -> bool:
     return any(name.startswith(p) for p in _RACK_PREFIXES)
@@ -94,12 +243,38 @@ def _arr_str(arr: dict | None) -> str:
     return f"{t[0]}:{t[1][:2]} / {arr['bars']:.0f} bars @ {arr['bpm']} BPM"
 
 
-def _ru_chains(n: int) -> str:
-    if n % 10 == 1 and n % 100 != 11:
-        return f"{n} цепочка"
-    if 2 <= n % 10 <= 4 and not (12 <= n % 100 <= 14):
-        return f"{n} цепочки"
-    return f"{n} цепочек"
+def _chains_label(n: int) -> str:
+    if _LANG == "ru":
+        if n % 10 == 1 and n % 100 != 11:
+            return f"{n} цепочка"
+        if 2 <= n % 10 <= 4 and not (12 <= n % 100 <= 14):
+            return f"{n} цепочки"
+        return f"{n} цепочек"
+    return f"{n} chain" if n == 1 else f"{n} chains"
+
+
+def _samples_warning(found: int, total: int, missing: int) -> str:
+    if _LANG == "ru":
+        return f"⚠  Семплы: {found} из {total} в папке проекта  — {missing} отсутствуют"
+    return f"⚠  Samples: {found} of {total} in project folder  — {missing} missing"
+
+
+def _samples_ok(total: int) -> str:
+    if _LANG == "ru":
+        return f"✓  Все семплы в папке проекта  ({total})"
+    return f"✓  All samples in project folder  ({total})"
+
+
+def _vst_all_found(total: int) -> str:
+    if _LANG == "ru":
+        return f"✓  Все {total} найдены"
+    return f"✓  All {total} found"
+
+
+def _vst_partial(found: int, total: int) -> str:
+    if _LANG == "ru":
+        return f"Найдено {found} из {total}  •  {total - found} отсутствуют"
+    return f"Found {found} of {total}  •  {total - found} missing"
 
 
 def _rack_devices(rack_details: list, mode: str) -> list[str]:
@@ -129,16 +304,16 @@ def _build_report(data: dict) -> str:
 
     arr = data.get("arrangement")
     if arr:
-        lines.append(f"Длина аранжировки: {_arr_str(arr)}")
+        lines.append(f"{T('rep_arr_len')} {_arr_str(arr)}")
         lines.append("")
 
     main = data["main"]
-    lines.append("=== MAIN КАНАЛ ===")
-    lines.append(f"  Фейдер: {_fmt_db(main['fader_db'])}")
+    lines.append(T("rep_main"))
+    lines.append(f"{T('rep_fader')} {_fmt_db(main['fader_db'])}")
     if main["fader_above_0db"]:
-        lines.append("  ⚠ ВНИМАНИЕ: фейдер выше 0 dB!")
+        lines.append(T("rep_warn_fader"))
     if main["live_effects"]:
-        lines.append(f"  Эффекты Live: {', '.join(main['live_effects'])}")
+        lines.append(f"{T('rep_live_fx')} {', '.join(main['live_effects'])}")
     if main["vst2_plugins"]:
         lines.append(f"  VST2: {', '.join(main['vst2_plugins'])}")
     if main["vst3_plugins"]:
@@ -147,32 +322,32 @@ def _build_report(data: dict) -> str:
         lines.append(f"  M4L: {', '.join(main['m4l_effects'])}")
     lines.append("")
 
-    lines.append("=== ТРЕКИ ===")
+    lines.append(T("rep_tracks"))
     for tr in data["tracks"]:
         mute_tag = "  [MUTED]" if tr.get("is_muted") else ""
         lines.append(
             f"[{_track_type_label(tr['type'])}] {tr['name']}  |  {_fmt_db(tr['fader_db'])}{mute_tag}"
         )
         if not tr["has_content"]:
-            lines.append("  — Нет контента (клипы пустые)")
+            lines.append(T("rep_no_content"))
         else:
             if tr["live_instruments"]:
-                lines.append(f"  Инструменты: {', '.join(tr['live_instruments'])}")
+                lines.append(f"{T('rep_instruments')} {', '.join(tr['live_instruments'])}")
             if tr["m4l_instruments"]:
-                lines.append(f"  Инструменты M4L: {', '.join(tr['m4l_instruments'])}")
+                lines.append(f"{T('rep_m4l_instruments')} {', '.join(tr['m4l_instruments'])}")
             if tr["live_effects"]:
-                lines.append(f"  Эффекты: {', '.join(tr['live_effects'])}")
+                lines.append(f"{T('rep_effects')} {', '.join(tr['live_effects'])}")
             if tr["m4l_effects"]:
-                lines.append(f"  Эффекты M4L: {', '.join(tr['m4l_effects'])}")
+                lines.append(f"{T('rep_m4l_effects')} {', '.join(tr['m4l_effects'])}")
             if tr["m4l_midi"]:
-                lines.append(f"  MIDI M4L: {', '.join(tr['m4l_midi'])}")
+                lines.append(f"{T('rep_midi_m4l')} {', '.join(tr['m4l_midi'])}")
             if tr["vst2_plugins"]:
                 lines.append(f"  VST2: {', '.join(tr['vst2_plugins'])}")
             if tr["vst3_plugins"]:
                 lines.append(f"  VST3: {', '.join(tr['vst3_plugins'])}")
-            lines.append(f"  Автоматизация: {'Да' if tr['has_automation'] else 'Нет'}")
+            lines.append(f"{T('rep_automation')} {T('rep_yes') if tr['has_automation'] else T('rep_no')}")
             for s in tr.get("sends", []):
-                suffix = "" if s["active"] else " [откл.]"
+                suffix = "" if s["active"] else T("rep_send_off")
                 lines.append(f"  Send {s['name']}: {_fmt_db(s['db'])}{suffix}")
     lines.append("")
 
@@ -187,18 +362,18 @@ def _build_report(data: dict) -> str:
         for name in _rack_devices(src.get("rack_details", []), "vst"):
             vst_total.add(name)
 
-    lines.append("=== СВОДКА ===")
-    lines.append(f"  Треков: {len(data['tracks'])}  |  с контентом: {len(with_content)}")
-    lines.append(f"  Сторонних плагинов (уникальных): {len(vst_total)}")
-    lines.append(f"  Треков с автоматизацией: {auto_count}")
+    lines.append(T("rep_summary"))
+    lines.append(f"{T('rep_tracks_count')} {len(data['tracks'])}  |  {T('rep_with_content')} {len(with_content)}")
+    lines.append(f"{T('rep_third_party')} {len(vst_total)}")
+    lines.append(f"{T('rep_auto_count')} {auto_count}")
 
     samples = data.get("samples", {})
     missing = samples.get("missing", [])
     found   = samples.get("found", [])
     if found or missing:
-        lines.append(f"  Семплы: найдено {len(found)}, не найдено {len(missing)}")
+        lines.append(f"{T('rep_samples_found')} {len(found)}{T('rep_samples_missing')} {len(missing)}")
         if missing:
-            lines.append(f"  Отсутствуют: {', '.join(missing)}")
+            lines.append(f"{T('rep_missing')} {', '.join(missing)}")
 
     return "\n".join(lines)
 
@@ -229,8 +404,8 @@ class ExpandableRack(ctk.CTkFrame):
         chains = rack.get("chains", [])
         n = len(chains)
         rack_type = rack["rack_type"]
-        self._lbl_collapsed = f"▶  {rack_type}  ({_ru_chains(n)})"
-        self._lbl_expanded  = f"▼  {rack_type}  ({_ru_chains(n)})"
+        self._lbl_collapsed = f"▶  {rack_type}  ({_chains_label(n)})"
+        self._lbl_expanded  = f"▼  {rack_type}  ({_chains_label(n)})"
 
         self._btn = ctk.CTkButton(
             self, text=self._lbl_collapsed, command=self._toggle,
@@ -285,14 +460,13 @@ class ExpandableSamples(ctk.CTkFrame):
 
         if missing:
             bg, text_col = "#2E1A1A", C_ERR
-            summary = (f"⚠  Семплы: {len(found)} из {total} в папке проекта  "
-                       f"— {len(missing)} отсутствуют")
+            summary = _samples_warning(len(found), total, len(missing))
         elif total == 0:
             bg, text_col = "#1A2E1A", C_OK
-            summary = "✓  Семплы не используются"
+            summary = T("samples_none")
         else:
             bg, text_col = "#1A2E1A", C_OK
-            summary = f"✓  Все семплы в папке проекта  ({total})"
+            summary = _samples_ok(total)
 
         super().__init__(master, fg_color=bg, corner_radius=8, **kw)
         self._expanded = False
@@ -364,7 +538,7 @@ class TrackCard(ctk.CTkFrame):
         body.pack(fill="x", padx=14, pady=(0, 8))
 
         if not tr["has_content"]:
-            ctk.CTkLabel(body, text="— Нет контента (клипы пустые)",
+            ctk.CTkLabel(body, text=T("no_content"),
                          font=(_FONT, 11), text_color=C_MUTED).pack(anchor="w")
             return
 
@@ -374,15 +548,15 @@ class TrackCard(ctk.CTkFrame):
         plain_fx    = [n for n in tr["live_effects"] if not _is_rack_entry(n)]
 
         if plain_instr:
-            self._row(body, "Инструменты Live:", ", ".join(plain_instr), C_VALUE)
+            self._row(body, T("live_instruments"), ", ".join(plain_instr), C_VALUE)
         if tr["m4l_instruments"]:
-            self._row(body, "Инструменты M4L:", _join_m4l(tr["m4l_instruments"]), C_M4L)
+            self._row(body, T("m4l_instruments"), _join_m4l(tr["m4l_instruments"]), C_M4L)
         if plain_fx:
-            self._row(body, "Эффекты Live:", ", ".join(plain_fx), C_VALUE)
+            self._row(body, T("live_effects"), ", ".join(plain_fx), C_VALUE)
         if tr["m4l_effects"]:
-            self._row(body, "Эффекты M4L:", _join_m4l(tr["m4l_effects"]), C_M4L)
+            self._row(body, T("m4l_effects"), _join_m4l(tr["m4l_effects"]), C_M4L)
         if tr["m4l_midi"]:
-            self._row(body, "MIDI-эффекты M4L:", _join_m4l(tr["m4l_midi"]), C_M4L)
+            self._row(body, T("midi_fx_m4l"), _join_m4l(tr["m4l_midi"]), C_M4L)
         if tr["vst2_plugins"]:
             self._row(body, "VST2:", ", ".join(tr["vst2_plugins"]), C_VST)
         if tr["vst3_plugins"]:
@@ -392,10 +566,10 @@ class TrackCard(ctk.CTkFrame):
             ExpandableRack(body, rack).pack(fill="x", pady=(2, 0))
 
         auto_col = C_OK if tr["has_automation"] else C_MUTED
-        self._row(body, "Автоматизация:", "Есть" if tr["has_automation"] else "Нет", auto_col)
+        self._row(body, T("automation"), T("yes") if tr["has_automation"] else T("no"), auto_col)
 
         for s in tr.get("sends", []):
-            suffix = "" if s["active"] else "  [откл.]"
+            suffix = "" if s["active"] else T("send_off")
             self._row(body, f"  Send {s['name']}:",
                       _fmt_db(s["db"]) + suffix, _db_color(s["db"]))
 
@@ -430,6 +604,39 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
     def _activate(self):
         self.lift()
         self.focus_force()
+
+    def _set_lang(self, lang: str):
+        global _LANG
+        if _LANG == lang:
+            return
+        _LANG = lang
+        self._update_static_labels()
+        if self._data is not None:
+            saved_scan = self._vst_scan
+            self._render(self._data)
+            if saved_scan is not None:
+                self._vst_scan = saved_scan
+                tab = self._tabview.tab(T("tab_vst"))
+                for w in tab.winfo_children():
+                    w.destroy()
+                self._build_tab_list(tab, self._data, "vst")
+                self._rebind_scroll()
+
+    def _update_static_labels(self):
+        self._btn_open.configure(text=T("btn_open"))
+        self._btn_copy.configure(text=T("btn_copy"))
+        self._placeholder.configure(text=T("placeholder"))
+        if self._data is None:
+            self._lbl_file.configure(text=T("no_file"))
+        ru_active = _LANG == "ru"
+        self._btn_lang_ru.configure(
+            fg_color="#3A3A5A" if ru_active else "#555555",
+            hover_color="#4A4A6A" if ru_active else "#666666",
+        )
+        self._btn_lang_en.configure(
+            fg_color="#3A3A5A" if not ru_active else "#555555",
+            hover_color="#4A4A6A" if not ru_active else "#666666",
+        )
 
     def _init_scroll_handler(self):
         if not HAS_PYOBJC:
@@ -476,18 +683,36 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         ctk.CTkLabel(header, text="Ableton Project Checker",
                      font=(_FONT, 16, "bold"), text_color=C_HEADER).pack(
             side="left", padx=16, pady=12)
-        self._btn_open = ctk.CTkButton(header, text="Открыть .als файл",
+
+        self._btn_open = ctk.CTkButton(header, text=T("btn_open"),
                                        command=self._open_file, width=160)
         self._btn_open.pack(side="right", padx=12, pady=10)
-        self._btn_copy = ctk.CTkButton(header, text="Копировать отчёт",
+        self._btn_copy = ctk.CTkButton(header, text=T("btn_copy"),
                                        command=self._copy_report, width=160,
                                        fg_color="#555555", hover_color="#666666")
         self._btn_copy.pack(side="right", padx=(0, 4), pady=10)
         self._btn_copy.configure(state="disabled")
 
+        lang_frame = ctk.CTkFrame(header, fg_color="transparent")
+        lang_frame.pack(side="right", padx=(0, 16), pady=10)
+        self._btn_lang_ru = ctk.CTkButton(
+            lang_frame, text="RU", width=38, height=28,
+            fg_color="#3A3A5A", hover_color="#4A4A6A",
+            command=lambda: self._set_lang("ru"),
+            font=(_FONT, 11, "bold"),
+        )
+        self._btn_lang_ru.pack(side="left")
+        self._btn_lang_en = ctk.CTkButton(
+            lang_frame, text="EN", width=38, height=28,
+            fg_color="#555555", hover_color="#666666",
+            command=lambda: self._set_lang("en"),
+            font=(_FONT, 11, "bold"),
+        )
+        self._btn_lang_en.pack(side="left", padx=(2, 0))
+
         self._file_bar = ctk.CTkFrame(self, fg_color="#252525", corner_radius=0)
         self._file_bar.pack(fill="x")
-        self._lbl_file = ctk.CTkLabel(self._file_bar, text="Файл не выбран",
+        self._lbl_file = ctk.CTkLabel(self._file_bar, text=T("no_file"),
                                       font=(_FONT, 11), text_color=C_MUTED)
         self._lbl_file.pack(side="left", padx=16, pady=6)
         self._lbl_version = ctk.CTkLabel(self._file_bar, text="",
@@ -501,7 +726,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
         self._placeholder = ctk.CTkLabel(
             self,
-            text="Перетащите .als файл сюда\nили нажмите «Открыть .als файл»",
+            text=T("placeholder"),
             font=(_FONT, 14), text_color=C_MUTED, justify="center",
         )
         self._placeholder.pack(fill="both", expand=True)
@@ -530,14 +755,14 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         else:
             raw = raw.split()[0]
         if not raw.lower().endswith(".als"):
-            messagebox.showwarning("Неверный файл", "Пожалуйста, перетащите файл .als")
+            messagebox.showwarning(T("warn_invalid_title"), T("warn_invalid_msg"))
             return
         self._load_file(raw)
 
     def _open_file(self):
         path = filedialog.askopenfilename(
-            title="Выберите файл Ableton Live",
-            filetypes=[("Ableton Live Set", "*.als"), ("Все файлы", "*.*")]
+            title=T("dialog_title"),
+            filetypes=[("Ableton Live Set", "*.als"), (T("dialog_all_files"), "*.*")]
         )
         if path:
             self._load_file(path)
@@ -546,7 +771,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         try:
             data = parse_als(path)
         except Exception as e:
-            messagebox.showerror("Ошибка", str(e))
+            messagebox.showerror(T("err_title"), str(e))
             return
         self._data = data
         self._lbl_file.configure(text=os.path.basename(path), text_color=C_VALUE)
@@ -575,14 +800,14 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             segmented_button_selected_hover_color="#4A4A6A",
         )
         self._tabview.pack(fill="both", expand=True)
-        for name in ["Треки", "Инструменты", "Аудио FX", "MIDI FX", "VST"]:
+        for name in [T("tab_tracks"), T("tab_instruments"), T("tab_audio_fx"), T("tab_midi_fx"), T("tab_vst")]:
             self._tabview.add(name)
 
-        self._build_tab_tracks(self._tabview.tab("Треки"), data)
-        self._build_tab_list(self._tabview.tab("Инструменты"), data, "instruments")
-        self._build_tab_list(self._tabview.tab("Аудио FX"),    data, "audiofx")
-        self._build_tab_list(self._tabview.tab("MIDI FX"),     data, "midifx")
-        self._build_tab_list(self._tabview.tab("VST"),         data, "vst")
+        self._build_tab_tracks(self._tabview.tab(T("tab_tracks")), data)
+        self._build_tab_list(self._tabview.tab(T("tab_instruments")), data, "instruments")
+        self._build_tab_list(self._tabview.tab(T("tab_audio_fx")),   data, "audiofx")
+        self._build_tab_list(self._tabview.tab(T("tab_midi_fx")),    data, "midifx")
+        self._build_tab_list(self._tabview.tab(T("tab_vst")),        data, "vst")
         self._rebind_scroll()
 
     # ── Info area (above tabs) ─────────────────────────────────────────────────
@@ -592,7 +817,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
         main_card = ctk.CTkFrame(self._info_area, fg_color="#252840", corner_radius=8)
         main_card.pack(fill="x", **pad)
-        SectionLabel(main_card, "MAIN КАНАЛ").pack(anchor="w", padx=12, pady=(10, 4))
+        SectionLabel(main_card, T("main_channel")).pack(anchor="w", padx=12, pady=(10, 4))
 
         main = data["main"]
         rf = ctk.CTkFrame(main_card, fg_color="transparent")
@@ -602,21 +827,21 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         fader_txt = _fmt_db(fdb)
         if main["fader_above_0db"]:
             fader_col = C_ERR
-            fader_txt += "  ⚠ выше 0 dB!"
+            fader_txt += f"  {T('fader_above')}"
         elif fdb is not None and (fdb == float("-inf") or fdb <= _SILENT_THRESHOLD):
             fader_col = C_SILENT
         else:
             fader_col = C_OK
-        KVRow(rf, "Фейдер:", fader_txt, fader_col).pack(anchor="w")
+        KVRow(rf, T("fader"), fader_txt, fader_col).pack(anchor="w")
 
         all_main_fx = (main["live_effects"]
                        + [f"[VST2] {p}" for p in main["vst2_plugins"]]
                        + [f"[VST3] {p}" for p in main["vst3_plugins"]])
-        KVRow(rf, "Плагины на Main:",
-              ", ".join(all_main_fx) if all_main_fx else "Нет",
+        KVRow(rf, T("plugins_on_main"),
+              ", ".join(all_main_fx) if all_main_fx else T("none"),
               C_VALUE if all_main_fx else C_MUTED).pack(anchor="w")
         if main["m4l_effects"]:
-            KVRow(rf, "M4L на Main:", _join_m4l(main["m4l_effects"]), C_M4L).pack(anchor="w")
+            KVRow(rf, T("m4l_on_main"), _join_m4l(main["m4l_effects"]), C_M4L).pack(anchor="w")
         ctk.CTkFrame(main_card, fg_color="transparent", height=6).pack()
 
         # Summary bar
@@ -637,11 +862,11 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         sf.pack(fill="x", padx=12, pady=8)
 
         for label, val in [
-            ("Треков всего:", str(len(data["tracks"]))),
-            ("С контентом:", str(len(with_content))),
-            ("Длина:", _arr_str(data.get("arrangement"))),
-            ("Сторонних плагинов:", str(len(vst_all))),
-            ("Автоматизация на:", f"{auto_count} тр."),
+            (T("total_tracks"),   str(len(data["tracks"]))),
+            (T("with_content"),   str(len(with_content))),
+            (T("length"),         _arr_str(data.get("arrangement"))),
+            (T("third_party"),    str(len(vst_all))),
+            (T("automation_on"),  f"{auto_count} {T('automation_tr_sfx')}"),
         ]:
             col = ctk.CTkFrame(sf, fg_color="transparent")
             col.pack(side="left", padx=14)
@@ -748,7 +973,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             hdr = ctk.CTkFrame(frame, fg_color="#1E1E1E", corner_radius=0)
             hdr.pack(fill="x")
             scan_btn = ctk.CTkButton(
-                hdr, text="Сканировать плагины",
+                hdr, text=T("btn_scan"),
                 command=lambda: self._run_vst_scan(scan_btn, summary_lbl),
                 width=180, fg_color="#3A3A5A", hover_color="#4A4A6A",
             )
@@ -760,20 +985,17 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
                 found = sum(1 for v in self._vst_scan.values() if v)
                 total = len(self._vst_scan)
                 if found == total:
-                    summary_lbl.configure(
-                        text=f"✓  Все {total} найдены", text_color=C_OK)
+                    summary_lbl.configure(text=_vst_all_found(total), text_color=C_OK)
                 else:
                     col = C_WARN if found > 0 else C_ERR
-                    summary_lbl.configure(
-                        text=f"Найдено {found} из {total}  •  {total - found} отсутствуют",
-                        text_color=col)
-                scan_btn.configure(text="Обновить")
+                    summary_lbl.configure(text=_vst_partial(found, total), text_color=col)
+                scan_btn.configure(text=T("btn_refresh"))
 
         scroll = ctk.CTkScrollableFrame(frame, fg_color="transparent")
         scroll.pack(fill="both", expand=True)
 
         if not rows:
-            ctk.CTkLabel(scroll, text="Нет", font=(_FONT, 13),
+            ctk.CTkLabel(scroll, text=T("empty_list"), font=(_FONT, 13),
                          text_color=C_MUTED).pack(pady=40)
             return
 
@@ -822,7 +1044,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         return sorted(vst2), sorted(vst3)
 
     def _run_vst_scan(self, btn: ctk.CTkButton, summary_lbl: ctk.CTkLabel):
-        btn.configure(state="disabled", text="Сканирование...")
+        btn.configure(state="disabled", text=T("btn_scanning"))
         summary_lbl.configure(text="", text_color=C_MUTED)
         vst2_names, vst3_names = self._collect_all_vsts()
 
@@ -834,7 +1056,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
     def _on_vst_scan_done(self, results: dict):
         self._vst_scan = results
-        tab = self._tabview.tab("VST")
+        tab = self._tabview.tab(T("tab_vst"))
         for w in tab.winfo_children():
             w.destroy()
         self._build_tab_list(tab, self._data, "vst")
@@ -845,7 +1067,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             return
         self.clipboard_clear()
         self.clipboard_append(_build_report(self._data))
-        messagebox.showinfo("Готово", "Отчёт скопирован в буфер обмена.")
+        messagebox.showinfo(T("done_title"), T("done_msg"))
 
 
 if __name__ == "__main__":
