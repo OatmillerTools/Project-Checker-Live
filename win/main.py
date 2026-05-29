@@ -1,14 +1,24 @@
 import os
+import sys
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import customtkinter as ctk
 from tkinterdnd2 import TkinterDnD, DND_FILES
 
+try:
+    from AppKit import NSEvent
+    _NSSCROLLMASK = 1 << 22
+    HAS_PYOBJC = True
+except ImportError:
+    HAS_PYOBJC = False
+
 from als_parser import parse_als, scan_vst_plugins
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
+
+_FONT = "Helvetica Neue" if sys.platform == "darwin" else "Segoe UI"
 
 # ── Colors ─────────────────────────────────────────────────────────────────────
 C_OK    = "#4CAF50"
@@ -169,11 +179,13 @@ def _build_report(data: dict) -> str:
     with_content = [t for t in data["tracks"] if t["has_content"]]
     vst_total: set[str] = set()
     auto_count = sum(1 for t in data["tracks"] if t["has_automation"])
-    for t in data["tracks"]:
-        vst_total.update(t["vst2_plugins"])
-        vst_total.update(t["vst3_plugins"])
-    vst_total.update(main["vst2_plugins"])
-    vst_total.update(main["vst3_plugins"])
+    for src in data["tracks"] + [main]:
+        for n in src.get("vst2_plugins", []):
+            vst_total.add(f"VST2:{n}")
+        for n in src.get("vst3_plugins", []):
+            vst_total.add(f"VST3:{n}")
+        for name in _rack_devices(src.get("rack_details", []), "vst"):
+            vst_total.add(name)
 
     lines.append("=== СВОДКА ===")
     lines.append(f"  Треков: {len(data['tracks'])}  |  с контентом: {len(with_content)}")
@@ -195,16 +207,16 @@ def _build_report(data: dict) -> str:
 
 class SectionLabel(ctk.CTkLabel):
     def __init__(self, master, text, **kw):
-        super().__init__(master, text=text, font=("Segoe UI", 13, "bold"),
+        super().__init__(master, text=text, font=(_FONT, 13, "bold"),
                          text_color=C_HEADER, **kw)
 
 
 class KVRow(ctk.CTkFrame):
     def __init__(self, master, key: str, value: str, value_color: str = C_VALUE, **kw):
         super().__init__(master, fg_color="transparent", **kw)
-        ctk.CTkLabel(self, text=key, font=("Segoe UI", 11), text_color=C_LABEL,
+        ctk.CTkLabel(self, text=key, font=(_FONT, 11), text_color=C_LABEL,
                      width=160, anchor="w").pack(side="left")
-        ctk.CTkLabel(self, text=value, font=("Segoe UI", 11, "bold"),
+        ctk.CTkLabel(self, text=value, font=(_FONT, 11, "bold"),
                      text_color=value_color, anchor="w").pack(side="left", padx=(4, 0))
 
 
@@ -223,7 +235,7 @@ class ExpandableRack(ctk.CTkFrame):
         self._btn = ctk.CTkButton(
             self, text=self._lbl_collapsed, command=self._toggle,
             fg_color="#383838", hover_color="#464646",
-            anchor="w", font=("Segoe UI", 11), text_color=C_VALUE, height=28,
+            anchor="w", font=(_FONT, 11), text_color=C_VALUE, height=28,
         )
         self._btn.pack(fill="x", pady=(2, 0))
 
@@ -236,7 +248,7 @@ class ExpandableRack(ctk.CTkFrame):
         f.pack(fill="x", padx=10, pady=(4, 0))
         name = chain.get("chain_name", "").strip()
         if name:
-            ctk.CTkLabel(f, text=name, font=("Segoe UI", 10, "bold"),
+            ctk.CTkLabel(f, text=name, font=(_FONT, 10, "bold"),
                          text_color=C_LABEL).pack(anchor="w")
         devs: list[str] = []
         devs.extend(chain.get("live_instruments", []))
@@ -249,7 +261,7 @@ class ExpandableRack(ctk.CTkFrame):
             devs.append(f"{m} [M4L]")
         if devs:
             ctk.CTkLabel(f, text="  " + " → ".join(devs),
-                         font=("Segoe UI", 10), text_color=C_VALUE,
+                         font=(_FONT, 10), text_color=C_VALUE,
                          wraplength=480, justify="left").pack(anchor="w")
         ctk.CTkFrame(parent, fg_color="#383838", height=1).pack(fill="x", padx=10, pady=3)
 
@@ -288,14 +300,14 @@ class ExpandableSamples(ctk.CTkFrame):
         self._text_col = text_col
 
         if total == 0:
-            ctk.CTkLabel(self, text=summary, font=("Segoe UI", 11),
+            ctk.CTkLabel(self, text=summary, font=(_FONT, 11),
                          text_color=text_col, justify="left").pack(anchor="w", padx=12, pady=8)
             return
 
         self._btn = ctk.CTkButton(
             self, text=f"▶  {summary}", command=self._toggle,
             fg_color="transparent", hover_color="#404040",
-            anchor="w", font=("Segoe UI", 11), text_color=text_col, height=34,
+            anchor="w", font=(_FONT, 11), text_color=text_col, height=34,
         )
         self._btn.pack(fill="x", padx=4, pady=2)
 
@@ -310,9 +322,9 @@ class ExpandableSamples(ctk.CTkFrame):
     def _sample_row(parent, icon: str, name: str, color: str):
         f = ctk.CTkFrame(parent, fg_color="transparent")
         f.pack(fill="x", padx=16, pady=1)
-        ctk.CTkLabel(f, text=icon, font=("Segoe UI", 11, "bold"),
+        ctk.CTkLabel(f, text=icon, font=(_FONT, 11, "bold"),
                      text_color=color, width=18).pack(side="left")
-        ctk.CTkLabel(f, text=name, font=("Segoe UI", 11),
+        ctk.CTkLabel(f, text=name, font=(_FONT, 11),
                      text_color=color, anchor="w").pack(side="left", padx=(4, 0))
 
     def _toggle(self):
@@ -339,21 +351,21 @@ class TrackCard(ctk.CTkFrame):
 
         tc = _TYPE_COLORS.get(tr["type"], C_VALUE)
         ctk.CTkLabel(top, text=f"[{_track_type_label(tr['type'])}]",
-                     font=("Segoe UI", 11, "bold"), text_color=tc).pack(side="left")
+                     font=(_FONT, 11, "bold"), text_color=tc).pack(side="left")
         ctk.CTkLabel(top, text=f"  {tr['name']}",
-                     font=("Segoe UI", 12, "bold"), text_color=C_HEADER).pack(side="left")
+                     font=(_FONT, 12, "bold"), text_color=C_HEADER).pack(side="left")
         ctk.CTkLabel(top, text=f"  {_fmt_db(tr['fader_db'])}",
-                     font=("Segoe UI", 11), text_color=_db_color(tr["fader_db"])).pack(side="left")
+                     font=(_FONT, 11), text_color=_db_color(tr["fader_db"])).pack(side="left")
         if tr.get("is_muted"):
             ctk.CTkLabel(top, text="  MUTED",
-                         font=("Segoe UI", 11, "bold"), text_color=C_WARN).pack(side="left")
+                         font=(_FONT, 11, "bold"), text_color=C_WARN).pack(side="left")
 
         body = ctk.CTkFrame(self, fg_color="transparent")
         body.pack(fill="x", padx=14, pady=(0, 8))
 
         if not tr["has_content"]:
             ctk.CTkLabel(body, text="— Нет контента (клипы пустые)",
-                         font=("Segoe UI", 11), text_color=C_MUTED).pack(anchor="w")
+                         font=(_FONT, 11), text_color=C_MUTED).pack(anchor="w")
             return
 
         # Flat device lists (racks shown separately as expandable widgets)
@@ -391,9 +403,9 @@ class TrackCard(ctk.CTkFrame):
     def _row(parent, key: str, value: str, color: str):
         f = ctk.CTkFrame(parent, fg_color="transparent")
         f.pack(anchor="w", fill="x")
-        ctk.CTkLabel(f, text=key, font=("Segoe UI", 11), text_color=C_LABEL,
+        ctk.CTkLabel(f, text=key, font=(_FONT, 11), text_color=C_LABEL,
                      width=160, anchor="w").pack(side="left")
-        ctk.CTkLabel(f, text=value, font=("Segoe UI", 11),
+        ctk.CTkLabel(f, text=value, font=(_FONT, 11),
                      text_color=color, anchor="w", wraplength=520, justify="left").pack(
             side="left", padx=(4, 0))
 
@@ -412,12 +424,57 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self._content_shown = False
         self._build_ui()
         self._setup_dnd()
+        self._init_scroll_handler()
+        self.after(100, self._activate)
+
+    def _activate(self):
+        self.lift()
+        self.focus_force()
+
+    def _init_scroll_handler(self):
+        if not HAS_PYOBJC:
+            return
+
+        def _handle_ns_scroll(ns_event):
+            delta = ns_event.scrollingDeltaY()
+            if delta == 0:
+                return ns_event
+            # Normalize: trackpad gives pixels, mouse wheel gives lines
+            if ns_event.hasPreciseScrollingDeltas():
+                amount = int(delta / 8) or (1 if delta > 0 else -1)
+            else:
+                amount = int(delta) or (1 if delta > 0 else -1)
+            # Schedule on tkinter thread (we're already on main thread, but after()
+            # ensures the canvas state is stable)
+            self.after(0, self._do_scroll, amount)
+            return ns_event
+
+        self._ns_monitor = NSEvent.addLocalMonitorForEventsMatchingMask_handler_(
+            _NSSCROLLMASK, _handle_ns_scroll
+        )
+
+    def _do_scroll(self, amount):
+        try:
+            px = self.winfo_pointerx()
+            py = self.winfo_pointery()
+            w = self.winfo_containing(px, py)
+        except Exception:
+            return
+        while w is not None:
+            if isinstance(w, ctk.CTkScrollableFrame):
+                # macOS natural scrolling: positive delta = fingers move down = content scrolls down
+                w._parent_canvas.yview_scroll(-amount, "units")
+                return
+            w = getattr(w, "master", None)
+
+    def _rebind_scroll(self):
+        pass
 
     def _build_ui(self):
         header = ctk.CTkFrame(self, fg_color="#1E1E1E", corner_radius=0)
         header.pack(fill="x")
         ctk.CTkLabel(header, text="Ableton Project Checker",
-                     font=("Segoe UI", 16, "bold"), text_color=C_HEADER).pack(
+                     font=(_FONT, 16, "bold"), text_color=C_HEADER).pack(
             side="left", padx=16, pady=12)
         self._btn_open = ctk.CTkButton(header, text="Открыть .als файл",
                                        command=self._open_file, width=160)
@@ -431,10 +488,10 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self._file_bar = ctk.CTkFrame(self, fg_color="#252525", corner_radius=0)
         self._file_bar.pack(fill="x")
         self._lbl_file = ctk.CTkLabel(self._file_bar, text="Файл не выбран",
-                                      font=("Segoe UI", 11), text_color=C_MUTED)
+                                      font=(_FONT, 11), text_color=C_MUTED)
         self._lbl_file.pack(side="left", padx=16, pady=6)
         self._lbl_version = ctk.CTkLabel(self._file_bar, text="",
-                                         font=("Segoe UI", 11), text_color=C_MUTED)
+                                         font=(_FONT, 11), text_color=C_MUTED)
         self._lbl_version.pack(side="right", padx=16, pady=6)
 
         # Content container: info_area (fixed top) + tabview (expanding bottom)
@@ -445,7 +502,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self._placeholder = ctk.CTkLabel(
             self,
             text="Перетащите .als файл сюда\nили нажмите «Открыть .als файл»",
-            font=("Segoe UI", 14), text_color=C_MUTED, justify="center",
+            font=(_FONT, 14), text_color=C_MUTED, justify="center",
         )
         self._placeholder.pack(fill="both", expand=True)
 
@@ -526,6 +583,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self._build_tab_list(self._tabview.tab("Аудио FX"),    data, "audiofx")
         self._build_tab_list(self._tabview.tab("MIDI FX"),     data, "midifx")
         self._build_tab_list(self._tabview.tab("VST"),         data, "vst")
+        self._rebind_scroll()
 
     # ── Info area (above tabs) ─────────────────────────────────────────────────
 
@@ -564,9 +622,13 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         # Summary bar
         with_content = [t for t in data["tracks"] if t["has_content"]]
         vst_all: set[str] = set()
-        for t in data["tracks"]:
-            vst_all.update(t["vst2_plugins"]); vst_all.update(t["vst3_plugins"])
-        vst_all.update(main["vst2_plugins"]); vst_all.update(main["vst3_plugins"])
+        for src in data["tracks"] + [main]:
+            for n in src.get("vst2_plugins", []):
+                vst_all.add(f"VST2:{n}")
+            for n in src.get("vst3_plugins", []):
+                vst_all.add(f"VST3:{n}")
+            for name in _rack_devices(src.get("rack_details", []), "vst"):
+                vst_all.add(name)
         auto_count = sum(1 for t in data["tracks"] if t["has_automation"])
 
         summary_card = ctk.CTkFrame(self._info_area, fg_color="#263226", corner_radius=8)
@@ -583,8 +645,8 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         ]:
             col = ctk.CTkFrame(sf, fg_color="transparent")
             col.pack(side="left", padx=14)
-            ctk.CTkLabel(col, text=label, font=("Segoe UI", 10), text_color=C_LABEL).pack()
-            ctk.CTkLabel(col, text=val, font=("Segoe UI", 14, "bold"), text_color=C_OK).pack()
+            ctk.CTkLabel(col, text=label, font=(_FONT, 10), text_color=C_LABEL).pack()
+            ctk.CTkLabel(col, text=val, font=(_FONT, 14, "bold"), text_color=C_OK).pack()
 
         # Samples status — expandable
         ExpandableSamples(
@@ -618,7 +680,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
     def _build_tab_list(self, frame: ctk.CTkFrame, data: dict, mode: str):
         """Flat list tab. mode: 'instruments' | 'audiofx' | 'midifx' | 'vst'"""
-        # rows: (track_name, track_type, dev_display, dev_color)
+
         rows: list[tuple[str, str, str, str]] = []
         main = data["main"]
 
@@ -682,7 +744,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             for d in _rack_devices(main.get("rack_details", []), "vst"):
                 rows.append(("Main", "main", d, C_VST))
 
-            # ── Scan header ────────────────────────────────────────────────────
+            # ── Scan header ───────────────────────────────────────────────────
             hdr = ctk.CTkFrame(frame, fg_color="#1E1E1E", corner_radius=0)
             hdr.pack(fill="x")
             scan_btn = ctk.CTkButton(
@@ -691,27 +753,27 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
                 width=180, fg_color="#3A3A5A", hover_color="#4A4A6A",
             )
             scan_btn.pack(side="left", padx=12, pady=8)
-            summary_lbl = ctk.CTkLabel(hdr, text="", font=("Segoe UI", 11),
-                                       text_color="#888888")
+            summary_lbl = ctk.CTkLabel(hdr, text="", font=(_FONT, 11),
+                                       text_color=C_MUTED)
             summary_lbl.pack(side="left", padx=4)
             if self._vst_scan is not None:
                 found = sum(1 for v in self._vst_scan.values() if v)
                 total = len(self._vst_scan)
                 if found == total:
                     summary_lbl.configure(
-                        text=f"✓  Все {total} найдены", text_color="#4CAF50")
+                        text=f"✓  Все {total} найдены", text_color=C_OK)
                 else:
-                    scol = "#FFA726" if found > 0 else "#EF5350"
+                    col = C_WARN if found > 0 else C_ERR
                     summary_lbl.configure(
-                        text=f"Найдено {found} из {total}  •  {total-found} отсутствуют",
-                        text_color=scol)
+                        text=f"Найдено {found} из {total}  •  {total - found} отсутствуют",
+                        text_color=col)
                 scan_btn.configure(text="Обновить")
 
         scroll = ctk.CTkScrollableFrame(frame, fg_color="transparent")
         scroll.pack(fill="both", expand=True)
 
         if not rows:
-            ctk.CTkLabel(scroll, text="Нет", font=("Segoe UI", 13),
+            ctk.CTkLabel(scroll, text="Нет", font=(_FONT, 13),
                          text_color=C_MUTED).pack(pady=40)
             return
 
@@ -719,17 +781,8 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             bg = C_BG_CARD if i % 2 == 0 else C_BG_ALT
             row_f = ctk.CTkFrame(scroll, fg_color=bg, corner_radius=4)
             row_f.pack(fill="x", padx=8, pady=1)
-            tc   = _TYPE_COLORS.get(track_type, C_VALUE)
-            tag  = _track_type_label(track_type).upper() if track_type != "main" else "MAIN"
-            ctk.CTkLabel(row_f, text=f"[{tag}]",
-                         font=("Segoe UI", 10, "bold"), text_color=tc,
-                         width=55).pack(side="left", padx=(8, 4), pady=5)
-            ctk.CTkLabel(row_f, text=track_name,
-                         font=("Segoe UI", 11), text_color=C_LABEL,
-                         width=180, anchor="w").pack(side="left")
-            ctk.CTkLabel(row_f, text=dev_name,
-                         font=("Segoe UI", 11, "bold"), text_color=dev_col,
-                         anchor="w").pack(side="left", padx=(4, 8))
+
+            # status icon — pack right before left-expanding elements
             if mode == "vst" and self._vst_scan is not None:
                 ptype = "vst2" if dev_name.startswith("VST2:") else "vst3"
                 pname = dev_name[6:].strip()
@@ -737,12 +790,25 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
                 ctk.CTkLabel(
                     row_f,
                     text="✓" if found else "✗",
-                    font=("Segoe UI", 13, "bold"),
-                    text_color="#4CAF50" if found else "#EF5350",
+                    font=(_FONT, 13, "bold"),
+                    text_color=C_OK if found else C_ERR,
                     width=24,
                 ).pack(side="right", padx=(4, 10))
 
-    def _collect_all_vsts(self):
+            tc  = _TYPE_COLORS.get(track_type, C_VALUE)
+            tag = _track_type_label(track_type).upper() if track_type != "main" else "MAIN"
+            ctk.CTkLabel(row_f, text=f"[{tag}]",
+                         font=(_FONT, 10, "bold"), text_color=tc,
+                         width=55).pack(side="left", padx=(8, 4), pady=5)
+            ctk.CTkLabel(row_f, text=track_name,
+                         font=(_FONT, 11), text_color=C_LABEL,
+                         width=180, anchor="w").pack(side="left")
+            ctk.CTkLabel(row_f, text=dev_name,
+                         font=(_FONT, 11, "bold"), text_color=dev_col,
+                         anchor="w").pack(side="left", padx=(4, 8))
+
+    def _collect_all_vsts(self) -> tuple[list, list]:
+        """Collect unique VST2 and VST3 names from all tracks, main, and racks."""
         vst2, vst3 = set(), set()
         sources = [self._data["main"]] + self._data["tracks"]
         for src in sources:
@@ -755,21 +821,24 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
                     vst3.add(name[6:])
         return sorted(vst2), sorted(vst3)
 
-    def _run_vst_scan(self, btn, summary_lbl):
+    def _run_vst_scan(self, btn: ctk.CTkButton, summary_lbl: ctk.CTkLabel):
         btn.configure(state="disabled", text="Сканирование...")
-        summary_lbl.configure(text="")
+        summary_lbl.configure(text="", text_color=C_MUTED)
         vst2_names, vst3_names = self._collect_all_vsts()
+
         def _do():
             results = scan_vst_plugins(vst2_names, vst3_names)
             self.after(0, lambda: self._on_vst_scan_done(results))
+
         threading.Thread(target=_do, daemon=True).start()
 
-    def _on_vst_scan_done(self, results):
+    def _on_vst_scan_done(self, results: dict):
         self._vst_scan = results
         tab = self._tabview.tab("VST")
         for w in tab.winfo_children():
             w.destroy()
         self._build_tab_list(tab, self._data, "vst")
+        self._rebind_scroll()
 
     def _copy_report(self):
         if self._data is None:
@@ -780,5 +849,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
 
 if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
     app = App()
     app.mainloop()
